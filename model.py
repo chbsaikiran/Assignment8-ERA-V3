@@ -57,19 +57,19 @@ class Net(nn.Module):
             nn.ReLU(),
             nn.BatchNorm2d(128),
             nn.Dropout(dropout_value)
-        ) # output_size = 16 , receptive_field = 27
+        ) # output_size = 13 , receptive_field = 27
 
          # TRANSITION BLOCK 2
         self.convblock9 = nn.Sequential(
             nn.Conv2d(in_channels=128, out_channels=16, kernel_size=(1, 1), padding=0, bias=False),
-        ) # output_size = 16 , receptive_field = 35
+        ) # output_size = 13 , receptive_field = 35
 
         self.convblock10 = nn.Sequential(
             nn.Conv2d(in_channels=16, out_channels=32, kernel_size=(3, 3), padding=1, bias=False),
             nn.ReLU(),
             nn.BatchNorm2d(32),
             nn.Dropout(dropout_value)
-        ) # output_size = 16 , receptive_field = 35
+        ) # output_size = 13 , receptive_field = 35
 
         self.convblock11 = nn.Sequential(
             nn.Conv2d(in_channels=32, out_channels=64, kernel_size=(3, 3), stride=2, padding=1, bias=False),
