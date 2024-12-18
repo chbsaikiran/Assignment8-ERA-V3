@@ -48,14 +48,7 @@ print(device)
 model = Net().to(device)
 summary(model, input_size=(3, 32, 32))
 
-
 from tqdm import tqdm
-from torch.optim.lr_scheduler import StepLR
-
-model =  Net().to(device)
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=0.01)
-scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=1,cooldown=5)
 
 train_losses = []
 test_losses = []
@@ -80,7 +73,7 @@ def train(model, device, train_loader, optimizer, epoch):
     y_pred = model(data)
 
     # Calculate loss
-    loss = criterion(y_pred, target)
+    loss = F.nll_loss(y_pred, target)
     train_losses.append(loss)
 
     # Backpropagation
@@ -104,7 +97,7 @@ def test(model, device, test_loader):
         for data, target in test_loader:
             data, target = data.to(device), target.to(device)
             output = model(data)
-            test_loss += criterion(output, target)
+            test_loss += F.nll_loss(output, target, reduction='sum').item()  # sum up batch loss
             pred = output.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
             correct += pred.eq(target.view_as(pred)).sum().item()
 
@@ -116,6 +109,13 @@ def test(model, device, test_loader):
         100. * correct / len(test_loader.dataset)))
 
     test_acc.append(100. * correct / len(test_loader.dataset))
+
+
+from torch.optim.lr_scheduler import StepLR
+
+model =  Net().to(device)
+optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
+scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=1,cooldown=5)
 
 
 EPOCHS = 2
