@@ -62,7 +62,7 @@ class Net(nn.Module):
          # TRANSITION BLOCK 2
         self.convblock9 = nn.Sequential(
             nn.Conv2d(in_channels=128, out_channels=16, kernel_size=(1, 1), padding=0, bias=False),
-        ) # output_size = 13 , receptive_field = 35
+        ) # output_size = 13 , receptive_field = 27
 
         self.convblock10 = nn.Sequential(
             nn.Conv2d(in_channels=16, out_channels=32, kernel_size=(3, 3), padding=1, bias=False),
