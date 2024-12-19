@@ -1,7 +1,8 @@
-Files already downloaded and verified
-Files already downloaded and verified
-CUDA Available? True
-cuda
+Files already downloaded and verified<br>
+Files already downloaded and verified<br>
+CUDA Available? True<br>
+cuda<br>
+<pre>
 ----------------------------------------------------------------
         Layer (type)               Output Shape         Param #
 ================================================================
@@ -63,6 +64,8 @@ Forward/backward pass size (MB): 5.50
 Params size (MB): 0.64
 Estimated Total Size (MB): 6.15
 ----------------------------------------------------------------
+</pre>
+
 EPOCH: 0
 Loss=1.7189695835113525 Batch_id=390 Accuracy=38.77: 100%|██████████| 391/391 [00:30<00:00, 12.86it/s]
 
