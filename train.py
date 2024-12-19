@@ -1,23 +1,56 @@
 from __future__ import print_function
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
+import cv2
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
+import numpy as np
 from model import Net  # Import the model from model.py
 
 
-# Data augmentation and normalization for CIFAR-10
-transform = transforms.Compose([
-    transforms.RandomHorizontalFlip(),
-    transforms.RandomCrop(32, padding=4),
+# CIFAR-10 Mean and Std (calculated over the entire dataset)
+CIFAR10_MEAN = (0.4914, 0.4822, 0.4465)
+CIFAR10_STD = (0.2470, 0.2435, 0.2616)
+
+# Albumentations Transformations
+class AlbumentationsTransform:
+    def __init__(self, mean, std):
+        self.transform = A.Compose([
+            A.HorizontalFlip(p=0.5),  # Random horizontal flip
+            A.ShiftScaleRotate(shift_limit=0.0625, scale_limit=0.1, rotate_limit=15, p=0.5),  # Shift, Scale, Rotate
+            A.CoarseDropout(max_holes=1, max_height=16, max_width=16, min_holes=1, min_height=16, min_width=16, 
+                            fill_value=(np.array(mean) * 255).tolist(), mask_fill_value=None, p=0.5),  # CoarseDropout
+            A.Normalize(mean=mean, std=std, max_pixel_value=255.0),  # Normalize
+            ToTensorV2(),  # Convert to tensor
+        ])
+    
+    def __call__(self, img):
+        # Albumentations expects the image in OpenCV format (HWC, uint8)
+        image = np.array(img)  # Convert PIL image to numpy array
+        return self.transform(image=image)["image"]
+
+# Apply Albumentations Transformations to CIFAR-10
+train = datasets.CIFAR10(
+    root="./data",
+    train=True,
+    download=True,
+    transform=AlbumentationsTransform(mean=CIFAR10_MEAN, std=CIFAR10_STD)
+)
+
+test_transform = transforms.Compose([
     transforms.ToTensor(),
-    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+    transforms.Normalize(mean=CIFAR10_MEAN, std=CIFAR10_STD)
 ])
 
-# CIFAR-10 dataset
-train = datasets.CIFAR10(root='./data', train=True, transform=transform, download=True)
-test = datasets.CIFAR10(root='./data', train=False, transform=transform, download=True)
+test = datasets.CIFAR10(
+    root="./data",
+    train=False,
+    download=True,
+    transform=test_transform
+)
 
 SEED = 1
 
