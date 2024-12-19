@@ -96,14 +96,14 @@ class Net(nn.Module):
         ) # output_size = 14 , receptive_field = 35
 
         self.convblock11 = nn.Sequential(
-            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=(3, 3), padding=1, bias=False),
+            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=(3, 3), stride=2, padding=1, bias=False),
             nn.ReLU(),
             nn.BatchNorm2d(64),
             nn.Dropout(dropout_value)
         ) # output_size = 7 , receptive_field = 43
 
         self.convblock12 = DepthwiseSeparableConv(in_channels=64, out_channels=128)
-        # output_size = 7 , receptive_field = 51
+        # output_size = 7 , receptive_field = 55
 
         # OUTPUT BLOCK
         self.gap = nn.Sequential(
