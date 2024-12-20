@@ -107,15 +107,15 @@ class Net(nn.Module):
             nn.ReLU(),
             nn.BatchNorm2d(64),
             nn.Dropout(dropout_value),
-            # output_size = 12 , receptive_field = 49
+            # output_size = 14 , receptive_field = 49
 
             DepthwiseSeparableConv(in_channels=64, out_channels=128)
-            # output_size = 12 , receptive_field = 57
+            # output_size = 14 , receptive_field = 57
         )
 
         # OUTPUT BLOCK
         self.gap = nn.Sequential(
-            nn.AvgPool2d(kernel_size=12)
+            nn.AvgPool2d(kernel_size=14)
         ) # output_size = 1
 
         self.fc = nn.Linear(128, 10)
