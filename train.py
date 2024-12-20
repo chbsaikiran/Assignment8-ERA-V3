@@ -88,6 +88,8 @@ test_losses = []
 train_acc = []
 test_acc = []
 
+criterion = nn.CrossEntropyLoss()
+
 def train(model, device, train_loader, optimizer, epoch):
   model.train()
   pbar = tqdm(train_loader)
@@ -106,7 +108,7 @@ def train(model, device, train_loader, optimizer, epoch):
     y_pred = model(data)
 
     # Calculate loss
-    loss = F.nll_loss(y_pred, target)
+    loss = criterion(y_pred, target)
     train_losses.append(loss)
 
     # Backpropagation
@@ -130,7 +132,7 @@ def test(model, device, test_loader):
         for data, target in test_loader:
             data, target = data.to(device), target.to(device)
             output = model(data)
-            test_loss += F.nll_loss(output, target, reduction='sum').item()  # sum up batch loss
+            test_loss += criterion(output, target).item()  # sum up batch loss
             pred = output.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
             correct += pred.eq(target.view_as(pred)).sum().item()
 
@@ -156,7 +158,7 @@ for epoch in range(EPOCHS):
     print("EPOCH:", epoch)
     train(model, device, train_loader, optimizer, epoch)
     test(model, device, test_loader)
-    scheduler.step(test_losses[epoch])
+    scheduler.step(test_losses[-1])
     print(f"Learning Rate = {optimizer.param_groups[0]['lr']}\n")
     #if (test_acc[epoch] > 99.4):
     #  break
