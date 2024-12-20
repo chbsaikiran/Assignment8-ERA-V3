@@ -50,14 +50,14 @@ class Net(nn.Module):
         # TRANSITION BLOCK 1
         self.transition1 = nn.Sequential(
             nn.Conv2d(in_channels=128, out_channels=16, kernel_size=(1, 1), padding=0, bias=False),
-        ) # output_size = 16 , receptive_field = 15
+        ) # output_size = 16 , receptive_field = 11
 
         self.convblock2 = nn.Sequential(
             nn.Conv2d(in_channels=16, out_channels=32, kernel_size=(3, 3), padding=1, bias=False),
             nn.ReLU(),
             nn.BatchNorm2d(32),
             nn.Dropout(dropout_value),
-            # output_size = 16 , receptive_field = 17
+            # output_size = 16 , receptive_field = 15
 
             nn.Conv2d(in_channels=32, out_channels=64, kernel_size=(3, 3), padding=1, bias=False),
             nn.ReLU(),
@@ -72,45 +72,45 @@ class Net(nn.Module):
         # TRANSITION BLOCK 2
         self.transition2 = nn.Sequential(
             nn.Conv2d(in_channels=128, out_channels=16, kernel_size=(1, 1), padding=0, bias=False),
-        ) # output_size = 16 , receptive_field = 29
+        ) # output_size = 16 , receptive_field = 25
 
         self.convblock3 = nn.Sequential(
             nn.Conv2d(in_channels=16, out_channels=32, kernel_size=(3, 3), padding=1, bias=False),
             nn.ReLU(),
             nn.BatchNorm2d(32),
             nn.Dropout(dropout_value),
-            # output_size = 16 , receptive_field = 33
+            # output_size = 16 , receptive_field = 29
 
             nn.Conv2d(in_channels=32, out_channels=64, kernel_size=(3, 3), padding=1, bias=False),
             nn.ReLU(),
             nn.BatchNorm2d(64),
             nn.Dropout(dropout_value),
-            # output_size = 16 , receptive_field = 35
+            # output_size = 16 , receptive_field = 33
 
             DepthwiseSeparableConv(in_channels=64, out_channels=128)
-            # output_size = 16 , receptive_field = 39
+            # output_size = 16 , receptive_field = 37
         )
             
         # TRANSITION BLOCK 3
         self.transition3 = nn.Sequential(
             nn.Conv2d(in_channels=128, out_channels=16, kernel_size=(1, 1), padding=0, bias=False),
-        ) # output_size = 16 , receptive_field = 43
+        ) # output_size = 16 , receptive_field = 37
 
         self.convblock4 = nn.Sequential(
             nn.Conv2d(in_channels=16, out_channels=32, kernel_size=(3, 3), padding=1, bias=False),
             nn.ReLU(),
             nn.BatchNorm2d(32),
             nn.Dropout(dropout_value),
-            # output_size = 16 , receptive_field = 47
+            # output_size = 16 , receptive_field = 41
 
             nn.Conv2d(in_channels=32, out_channels=64, kernel_size=(3, 3), dilation=2, padding=1, bias=False),
             nn.ReLU(),
             nn.BatchNorm2d(64),
             nn.Dropout(dropout_value),
-            # output_size = 12 , receptive_field = 55
+            # output_size = 12 , receptive_field = 49
 
             DepthwiseSeparableConv(in_channels=64, out_channels=128)
-            # output_size = 12 , receptive_field = 63
+            # output_size = 12 , receptive_field = 57
         )
 
         # OUTPUT BLOCK
